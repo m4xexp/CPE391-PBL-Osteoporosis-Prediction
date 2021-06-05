@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-scroll";
 
 function Landing() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   //   const changeLang = () => {
   //     i18n.changeLanguage("th");
   //   };
@@ -25,11 +25,12 @@ function Landing() {
                 className="mx-auto text-base text-gray-500 sm:max-w-md lg:text-xl md:max-w-3xl text-left"
                 id=""
               >
-                <span>" </span>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Molestias voluptate temporibus odio quaerat delectus suscipit.
-                <span> " - </span>{" "}
-                <span className="font-bold">Mason Cooley</span>
+                Osteoporosis is now a national problem that is increasing day by
+                day due to the increasing number of the elderly population. It
+                is truly a "silent threat" because patients are unaware that
+                they have osteoporosis. because he did not find any symptoms
+                until he fell and had a "broken bone", so he knew it was
+                "Osteoporosis"
               </p>
               <div className="relative flex flex-col sm:flex-row sm:space-x-4">
                 <Link
@@ -74,7 +75,7 @@ function Landing() {
           <div className="w-full md:w-1/2">
             <div className="w-full h-auto overflow-hidden rounded-md sm:rounded-xl">
               <img
-                src="https://res.cloudinary.com/khaokruacooking/image/upload/v1613128958/SVG/Recycling_Waste_ddzoby.svg"
+                src="https://res.cloudinary.com/khaokruacooking/image/upload/v1622844466/PBL/Doctor_1_iemc41.svg"
                 className=""
                 id=""
                 alt="home-chibli"

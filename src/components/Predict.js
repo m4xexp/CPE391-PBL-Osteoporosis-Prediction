@@ -1,14 +1,75 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import FormData from "form-data";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 function Predict() {
+  // const [Done, setDone] = React.useState(true);
   const {
     register,
     handleSubmit,
-    watch,
+    // watch,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => console.log(data);
+
+  const options = {
+    method: "POST",
+    url: "http://127.0.0.1:8000/predict/ost/",
+    headers: {
+      "content-type": "multipart/form-data",
+    },
+    // config: { responseType: "blob" },
+    // responseType: "blob",
+  };
+
+  async function onSubmit(data) {
+    const bodyFormData = new FormData();
+    bodyFormData.append("Age", data.Age);
+    bodyFormData.append("Gender", data.Gender);
+    bodyFormData.append("Drink", data.Drink);
+    bodyFormData.append("Smoke", data.Smoke);
+    bodyFormData.append("Drug", data.Drug);
+    bodyFormData.append("DailyWalking", data.DailyWalking);
+    bodyFormData.append("EatingHabit", data.EatingHabit);
+    bodyFormData.append("Walk15Min", data.Walk15Min);
+    bodyFormData.append("GetupFromChair", data.GetupFromChair);
+    bodyFormData.append("WalkWORail", data.WalkWORail);
+    bodyFormData.append("WalkWOCane", data.WalkWOCane);
+    bodyFormData.append("ActivelyGoOut", data.ActivelyGoOut);
+    // console.log(data);
+
+    try {
+      const res = await axios.post(options.url, bodyFormData, {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      });
+      const result = res.data;
+      // console.log(result);
+      // setDone(true);
+      if (result.predict === 0) {
+        Swal.fire({
+          title: "Result",
+          html: `<strong style="color: #41B87F">${result.result}</strong>`,
+          icon: "success",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "Continue",
+        });
+      } else {
+        Swal.fire({
+          title: "Result",
+          html: `<strong style="color: #fe0000">${result.result}</strong><p style="color: #fe0000">${result.advice}</p>`,
+          // text: `${result.result}`,
+          icon: "warning",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "Continue",
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
   //   console.log(watch("Smoke")); // watch input value by passing the name of it
   return (
     <section className="w-full px-8 py-16 bg-gray-100 xl:px-8" id="predict">
@@ -16,15 +77,14 @@ function Predict() {
         <div className="flex flex-col items-center md:flex-row">
           <div className="w-full space-y-5 md:w-3/5 md:pr-16">
             <p className="font-medium text-blue-500 uppercase">
-              Building Businesses
+              Prediction System
             </p>
             <h2 className="text-2xl font-extrabold leading-none text-black sm:text-3xl md:text-5xl">
-              Changing The Way People Do Business.
+              Osteoporosis is more{" "}
+              <span className="text-red-500">dangerous</span> than you think.
             </h2>
             <p className="text-xl text-gray-600 md:pr-16">
-              Learn how to engage with your visitors and teach them about your
-              mission. We're revolutionizing the way customers and businesses
-              interact.
+              Fill out the form and predict if you have this serious disease..
             </p>
           </div>
 
@@ -35,11 +95,11 @@ function Predict() {
                   Personal
                 </h6>
 
-                <label class="block mt-4">
-                  <span class="text-gray-700 font-kanit">Gender</span>
+                <label className="block mt-4">
+                  <span className="text-gray-700 font-kanit">Gender</span>
                   <select
                     {...register("Gender", { required: true })}
-                    class="font-kanit block mt-2 w-full px-4 py-3 mb-4 border border-transparent border-gray-200 rounded-lg focus:ring focus:ring-blue-500 focus:outline-none"
+                    className="font-kanit block mt-2 w-full px-4 py-3 mb-4 border border-transparent border-gray-200 rounded-lg focus:ring focus:ring-blue-500 focus:outline-none"
                   >
                     <option value="">Please select</option>
                     <option value="0">Female</option>
@@ -52,12 +112,12 @@ function Predict() {
                   </span>
                 )}
 
-                <label class="block mt-4 ">
-                  <span class="text-gray-700 font-kanit">Age</span>
+                <label className="block mt-4 ">
+                  <span className="text-gray-700 font-kanit">Age</span>
                   <input
                     id="age "
                     type="number"
-                    {...register("age", {
+                    {...register("Age", {
                       min: 1,
                       max: 100,
                       maxLength: 3,
@@ -66,27 +126,30 @@ function Predict() {
                     className="font-kanit block mt-2 w-full px-4 py-3 mb-4 border border-transparent border-gray-200 rounded-lg focus:ring focus:ring-blue-500 focus:outline-none"
                   />
                 </label>
-                {errors.age && (
+                {errors.Age && (
                   <span className="text-red-500 font-kanit">
-                    This field is required
+                    Age limited for 3 lenght
                   </span>
                 )}
 
                 <h6 className="my-8 text-2xl font-semibold text-left font-kanit">
                   Life Independence
                 </h6>
-                <label class="block mt-4">
-                  <span class="text-gray-700 font-kanit">Daily Walking</span>
+                <label className="block mt-4">
+                  <span className="text-gray-700 font-kanit">
+                    Daily Walking
+                  </span>
                   <select
                     {...register("DailyWalking", { required: true })}
-                    class="font-kanit block mt-2 w-full px-4 py-3 mb-4 border border-transparent border-gray-200 rounded-lg focus:ring focus:ring-blue-500 focus:outline-none"
+                    className="font-kanit block mt-2 w-full px-4 py-3 mb-4 border border-transparent border-gray-200 rounded-lg focus:ring focus:ring-blue-500 focus:outline-none"
                   >
                     <option value="">Please Select</option>
+                    <option value="1">Yes</option>
                     <option value="0">No</option>
-                    <option value="20"> Once a day for 20 minutes</option>
-                    <option value="40"> Twice a day for 20 minutes</option>
+                    {/* <option value="0"> Once a day for 20 minutes</option> */}
+                    {/* <option value="40"> Twice a day for 20 minutes</option>
                     <option value="30"> Once a day for 30 minutes</option>
-                    <option value="60"> Twice a day for 30 minutes</option>
+                    <option value="60"> Twice a day for 30 minutes</option> */}
                   </select>
                 </label>
                 {errors.DailyWalking && (
@@ -95,11 +158,11 @@ function Predict() {
                   </span>
                 )}
 
-                <label class="block mt-4">
-                  <span class="text-gray-700 font-kanit">Eating Habit</span>
+                <label className="block mt-4">
+                  <span className="text-gray-700 font-kanit">Eating Habit</span>
                   <select
                     {...register("EatingHabit", { required: true })}
-                    class="font-kanit block mt-2 w-full px-4 py-3 mb-4 border border-transparent border-gray-200 rounded-lg focus:ring focus:ring-blue-500 focus:outline-none"
+                    className="font-kanit block mt-2 w-full px-4 py-3 mb-4 border border-transparent border-gray-200 rounded-lg focus:ring focus:ring-blue-500 focus:outline-none"
                   >
                     <option value="">Please Select</option>
                     <option value="1">1 meal a day</option>
@@ -113,218 +176,245 @@ function Predict() {
                   </span>
                 )}
 
-                <div class="my-4">
-                  <span class="text-gray-700 font-kanit">Smoke</span>
-                  <div class="mt-2">
-                    <label class="inline-flex items-center">
+                <div className="my-4">
+                  <span className="text-gray-700 font-kanit">Smoke</span>
+                  <div className="mt-2">
+                    <label className="inline-flex items-center">
                       <input
                         {...register("Smoke", { required: true })}
                         type="radio"
                         value="1"
                         className="font-kanit"
                       />
-                      <span class="ml-2 font-kanit">Yes</span>
+                      <span className="ml-2 font-kanit">Yes</span>
                     </label>
-                    <label class="inline-flex items-center ml-6">
+                    <label className="inline-flex items-center ml-6">
                       <input
                         {...register("Smoke", { required: true })}
                         type="radio"
                         value="0"
                       />
-                      <span class="ml-2 font-kanit">No</span>
+                      <span className="ml-2 font-kanit">No</span>
                     </label>
                   </div>
                 </div>
                 {errors.Smoke && (
-                  <span className="text-red-500">This field is required</span>
+                  <span className="text-red-500 font-kanit">
+                    This field is required
+                  </span>
                 )}
 
-                <div class="my-4">
-                  <span class="text-gray-700">Drink</span>
-                  <div class="mt-2">
-                    <label class="inline-flex items-center">
+                <div className="my-4">
+                  <span className="text-gray-700 font-kanit">Drink</span>
+                  <div className="mt-2">
+                    <label className="inline-flex items-center">
                       <input
                         {...register("Drink", { required: true })}
                         type="radio"
                         value="1"
                       />
-                      <span class="ml-2">Yes</span>
+                      <span className="ml-2 font-kanit">Yes</span>
                     </label>
-                    <label class="inline-flex items-center ml-6">
+                    <label className="inline-flex items-center ml-6">
                       <input
                         {...register("Drink", { required: true })}
                         type="radio"
                         value="0"
                       />
-                      <span class="ml-2">No</span>
+                      <span className="ml-2 font-kanit">No</span>
                     </label>
                   </div>
                 </div>
                 {errors.Drink && (
-                  <span className="text-red-500">This field is required</span>
+                  <span className="text-red-500 font-kanit">
+                    This field is required
+                  </span>
                 )}
 
-                <div class="my-4">
-                  <span class="text-gray-700">Osteoporosis drug</span>
-                  <div class="mt-2">
-                    <label class="inline-flex items-center">
+                <div className="my-4">
+                  <span className="text-gray-700 font-kanit">
+                    Osteoporosis drug
+                  </span>
+                  <div className="mt-2">
+                    <label className="inline-flex items-center">
                       <input
-                        {...register("OsteoporosisDrug", { required: true })}
+                        {...register("Drug", { required: true })}
                         type="radio"
                         value="1"
                       />
-                      <span class="ml-2">Yes</span>
+                      <span className="ml-2 font-kanit">Yes</span>
                     </label>
-                    <label class="inline-flex items-center ml-6">
+                    <label className="inline-flex items-center ml-6">
                       <input
-                        {...register("Osteoporosis drug", { required: true })}
+                        {...register("Drug", { required: true })}
                         type="radio"
                         value="0"
                       />
-                      <span class="ml-2">No</span>
+                      <span className="ml-2 font-kanit">No</span>
                     </label>
                   </div>
                 </div>
                 {errors.OsteoporosisDrug && (
-                  <span className="text-red-500">This field is required</span>
+                  <span className="text-red-500 font-kanit">
+                    This field is required
+                  </span>
                 )}
 
-                <div class="my-4">
-                  <span class="text-gray-700">
+                <h6 className="my-8 text-2xl font-semibold text-left font-kanit">
+                  Questionnaire
+                </h6>
+
+                <div className="my-4">
+                  <span className="text-gray-700 font-kanit">
                     Can you walk more than 15 minutes?
                   </span>
-                  <div class="mt-2">
-                    <label class="inline-flex items-center">
+                  <div className="mt-2">
+                    <label className="inline-flex items-center">
                       <input
-                        {...register("WalkMoreThan15min", { required: true })}
+                        {...register("Walk15Min", { required: true })}
                         type="radio"
                         value="1"
                       />
-                      <span class="ml-2">Yes</span>
+                      <span className="ml-2 font-kanit">Yes</span>
                     </label>
-                    <label class="inline-flex items-center ml-6">
+                    <label className="inline-flex items-center ml-6">
                       <input
-                        {...register("WalkMoreThan15min", { required: true })}
+                        {...register("Walk15Min", { required: true })}
                         type="radio"
                         value="0"
                       />
-                      <span class="ml-2">No</span>
+                      <span className="ml-2 font-kanit">No</span>
                     </label>
                   </div>
                 </div>
-                {errors.WalkMoreThan15min && (
-                  <span className="text-red-500">This field is required</span>
+                {errors.Walk15Min && (
+                  <span className="text-red-500 font-kanit">
+                    This field is required
+                  </span>
                 )}
 
-                <div class="my-4">
-                  <span class="text-gray-700">Can get up from the chair?</span>
-                  <div class="mt-2">
-                    <label class="inline-flex items-center">
+                <div className="my-4">
+                  <span className="text-gray-700 font-kanit">
+                    Can get up from the chair?
+                  </span>
+                  <div className="mt-2">
+                    <label className="inline-flex items-center">
                       <input
-                        {...register("GetUpFromChair", { required: true })}
+                        {...register("GetupFromChair", { required: true })}
                         type="radio"
                         value="1"
                       />
-                      <span class="ml-2">Yes</span>
+                      <span className="ml-2 font-kanit">Yes</span>
                     </label>
-                    <label class="inline-flex items-center ml-6">
+                    <label className="inline-flex items-center ml-6">
                       <input
-                        {...register("GetUpFromChair", { required: true })}
+                        {...register("GetupFromChair", { required: true })}
                         type="radio"
                         value="0"
                       />
-                      <span class="ml-2">No</span>
+                      <span className="ml-2 font-kanit">No</span>
                     </label>
                   </div>
                 </div>
-                {errors.GetUpFromChair && (
-                  <span className="text-red-500">This field is required</span>
+                {errors.GetupFromChair && (
+                  <span className="text-red-500 font-kanit">
+                    This field is required
+                  </span>
                 )}
 
-                <div class="my-4">
-                  <span class="text-gray-700">
+                <div className="my-4">
+                  <span className="text-gray-700 font-kanit">
                     Can you go up and down stairs without being transmitted to
                     the railing or wall?
                   </span>
-                  <div class="mt-2">
-                    <label class="inline-flex items-center">
+                  <div className="mt-2">
+                    <label className="inline-flex items-center">
                       <input
-                        {...register("UpDownWORaiil", { required: true })}
+                        {...register("WalkWORail", { required: true })}
                         type="radio"
                         value="1"
                       />
-                      <span class="ml-2">Yes</span>
+                      <span className="ml-2 font-kanit">Yes</span>
                     </label>
-                    <label class="inline-flex items-center ml-6">
+                    <label className="inline-flex items-center ml-6">
                       <input
-                        {...register("UpDownWORaiil", { required: true })}
+                        {...register("WalkWORail", { required: true })}
                         type="radio"
                         value="0"
                       />
-                      <span class="ml-2">No</span>
+                      <span className="ml-2 font-kanit">No</span>
                     </label>
                   </div>
                 </div>
-                {errors.UpDownWORaiil && (
-                  <span className="text-red-500">This field is required</span>
+                {errors.WalkWORail && (
+                  <span className="text-red-500 font-kanit">
+                    This field is required
+                  </span>
                 )}
 
-                <div class="my-4">
-                  <span class="text-gray-700">
+                <div className="my-4">
+                  <span className="text-gray-700 font-kanit">
                     Can you walk without a cane?
                   </span>
-                  <div class="mt-2">
-                    <label class="inline-flex items-center">
+                  <div className="mt-2">
+                    <label className="inline-flex items-center">
                       <input
                         {...register("WalkWOCane", { required: true })}
                         type="radio"
                         value="1"
                       />
-                      <span class="ml-2">Yes</span>
+                      <span className="ml-2 font-kanit">Yes</span>
                     </label>
-                    <label class="inline-flex items-center ml-6">
+                    <label className="inline-flex items-center ml-6">
                       <input
                         {...register("WalkWOCane", { required: true })}
                         type="radio"
                         value="0"
                       />
-                      <span class="ml-2">No</span>
+                      <span className="ml-2 font-kanit">No</span>
                     </label>
                   </div>
                 </div>
                 {errors.WalkWOCane && (
-                  <span className="text-red-500">This field is required</span>
+                  <span className="text-red-500 font-kanit">
+                    This field is required
+                  </span>
                 )}
 
-                <div class="my-4">
-                  <span class="text-gray-700">Are you actively going out?</span>
-                  <div class="mt-2">
-                    <label class="inline-flex items-center">
+                <div className="my-4">
+                  <span className="text-gray-700 font-kanit">
+                    Are you actively going out?
+                  </span>
+                  <div className="mt-2">
+                    <label className="inline-flex items-center">
                       <input
-                        {...register("ActivelyGoingOut", { required: true })}
+                        {...register("ActivelyGoOut", { required: true })}
                         type="radio"
                         value="1"
                       />
-                      <span class="ml-2">Yes</span>
+                      <span className="ml-2 font-kanit">Yes</span>
                     </label>
-                    <label class="inline-flex items-center ml-6">
+                    <label className="inline-flex items-center ml-6">
                       <input
-                        {...register("ActivelyGoingOut", { required: true })}
+                        {...register("ActivelyGoOut", { required: true })}
                         type="radio"
                         value="0"
                       />
-                      <span class="ml-2">No</span>
+                      <span className="ml-2 font-kanit">No</span>
                     </label>
                   </div>
                 </div>
-                {errors.ActivelyGoingOut && (
-                  <span className="text-red-500">This field is required</span>
+                {errors.ActivelyGoOut && (
+                  <span className="text-red-500 font-kanit">
+                    This field is required
+                  </span>
                 )}
                 {/* include validation with required or other standard HTML validation rules */}
 
                 <input
                   type="submit"
-                  className="w-full px-3 py-4 font-medium text-white bg-blue-600 rounded-lg"
+                  className="w-full px-3 py-4 font-medium text-white bg-blue-600 rounded-lg pointer"
+                  value="Analytics"
                 />
               </div>
             </form>
