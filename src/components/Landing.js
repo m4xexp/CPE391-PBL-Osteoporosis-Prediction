@@ -28,8 +28,8 @@ function Landing() {
                 Osteoporosis is now a national problem that is increasing day by
                 day due to the increasing number of the elderly population. It
                 is truly a "silent threat" because patients are unaware that
-                they have osteoporosis. because he did not find any symptoms
-                until he fell and had a "broken bone", so he knew it was
+                they have osteoporosis. Since they did not find any symptoms
+                until they fell and had a "broken bone", so they knew they have
                 "Osteoporosis"
               </p>
               <div className="relative flex flex-col sm:flex-row sm:space-x-4">

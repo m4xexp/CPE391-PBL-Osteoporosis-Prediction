@@ -84,7 +84,7 @@ function Predict() {
               <span className="text-red-500">dangerous</span> than you think.
             </h2>
             <p className="text-xl text-gray-600 md:pr-16">
-              Fill out the form and predict if you have this serious disease..
+              Fill out the form to predict if you have this serious disease..
             </p>
           </div>
 
@@ -414,7 +414,8 @@ function Predict() {
                 <input
                   type="submit"
                   className="w-full px-3 py-4 font-medium text-white bg-blue-600 rounded-lg pointer"
-                  value="Analytics"
+                  value="Start analyzing
+                  "
                 />
               </div>
             </form>
