@@ -15,7 +15,7 @@ function Predict() {
 
   const options = {
     method: "POST",
-    url: "http://127.0.0.1:8000/predict/ost/",
+    url: "https://ost-predict-backend.herokuapp.com/predict/ost/",
     headers: {
       "content-type": "multipart/form-data",
     },
